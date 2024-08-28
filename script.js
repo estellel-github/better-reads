@@ -148,3 +148,46 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
+
+
+// FOR TESTING
+
+const sciFiBooksByWomen = [
+  { title: "Kindred", author: "Octavia E. Butler" },
+  { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin" },
+  { title: "Parable of the Sower", author: "Octavia E. Butler" },
+  { title: "Ancillary Justice", author: "Ann Leckie" },
+  { title: "Dawn", author: "Octavia E. Butler" },
+  { title: "The Power", author: "Naomi Alderman" },
+  { title: "Frankenstein", author: "Mary Shelley" },
+  { title: "The Hunger Games", author: "Suzanne Collins" },
+  { title: "Shards of Honor", author: "Lois McMaster Bujold" },
+  { title: "Who Fears Death", author: "Nnedi Okorafor" },
+  { title: "Binti", author: "Nnedi Okorafor" },
+  { title: "The Dispossessed", author: "Ursula K. Le Guin" },
+  { title: "Ammonite", author: "Nicola Griffith" },
+  { title: "Mirror Dance", author: "Lois McMaster Bujold" },
+  { title: "Grass", author: "Sheri S. Tepper" },
+  { title: "The Snow Queen", author: "Joan D. Vinge" },
+  { title: "Fledgling", author: "Octavia E. Butler" },
+  { title: "Oryx and Crake", author: "Margaret Atwood" },
+  { title: "The Handmaid's Tale", author: "Margaret Atwood" },
+  { title: "Memory", author: "Lois McMaster Bujold" },
+  { title: "Patternmaster", author: "Octavia E. Butler" },
+];
+
+function populateLibrary() {
+  sciFiBooksByWomen.forEach(book => {
+      const newBook = new Book(
+          book.title,
+          book.author,
+          Math.floor(Math.random() * 500) + 100,
+          Math.random() > 0.5,
+          Math.floor(Math.random() * 5) + 1,
+      );
+      library.push(newBook);
+  });
+  displayBookList();
+}
+
+window.onload = populateLibrary;
