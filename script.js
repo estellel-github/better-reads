@@ -1,25 +1,3 @@
-// const theHobbit = new Book ("The Hobbit", "J.R.R. Tolkien", 295, false);
-
-// console.log(theHobbit.info());
-
-// console.log(Object.getPrototypeOf(theHobbit) === Book.prototype);
-
-// Book.prototype.getPages = function() {
-//   return `This book has ${this.numPages} pages.`
-// }
-
-// console.log(theHobbit.getPages());
-
-// TESTS: Adding book objects to arrays
-// const randomBook = new Book ("N/A", "N/A", 0, true);
-// library.push(randomBook);
-// const theHobbit = new Book ("The Hobbit", "J.R.R. Tolkien", 295, false);
-// library.push(theHobbit);
-
-// console.log(library);
-// console.log(randomBook.info());
-// console.log(theHobbit.info());
-
 const titleInput = document.querySelector("#title-input");
 const authorInput = document.querySelector("#author-input");
 const numPagesInput = document.querySelector("#num-pages-input");
@@ -27,8 +5,11 @@ const isReadInput = document.querySelector("#is-read-input");
 const ratingInput = () => document.querySelector('input[name="star"]:checked');
 const submitBtn = document.querySelector("#submit-btn");
 const bookList = document.querySelector("#book-list");
+const isReadRadio = document.querySelector("#is-read-radio");
 
-let bookIdCounter = 0;
+let library = [];
+
+let bookIdCounter = library.length;
 
 function Book(title, author, numPages, isRead, rating) {
   this.id = bookIdCounter++;
@@ -47,13 +28,11 @@ function Book(title, author, numPages, isRead, rating) {
   }
 }
 
-let library = [];
-
 function getBookInput() {
   const title = titleInput.value ? titleInput.value : "N/A";
   const author = authorInput.value ? authorInput.value : "N/A";
   const numPages = numPagesInput.value ? numPagesInput.value : "N/A";
-  const isRead = isReadInput.checked;
+  const isRead = isReadRadio.checked ? true : false;
   const rating = ratingInput() ? ratingInput().value : "No rating";
   return new Book(title, author, numPages, isRead, rating);
 }
@@ -74,6 +53,7 @@ function clearBookList() {
 submitBtn.addEventListener("click", (e) => {
   e.preventDefault();
   addNewBook();
+  modal.style.display = "none";
 });
 
 function createStarRating(rating) {
@@ -116,7 +96,6 @@ function displayBookList() {
     });
 
     card.classList.add("card");
-    card.dataset.libraryIndex = book.id;
     title.classList.add("card-title");
     author.classList.add("card-author");
     numPages.classList.add("card-num-pages");
@@ -130,5 +109,42 @@ function displayBookList() {
     isRead.textContent = book.isRead ? "Already read" : "Not read yet";
     card.append(title, author, numPages, isRead, toggleReadBtn, rating, removeBtn);
     bookList.appendChild(card);
+  }
+}
+
+function clearForm() {
+  titleInput.value = "";
+  authorInput.value = "";
+  numPagesInput.value = null;
+  isReadRadio.checked = true;
+  ratingInput.value = 1;
+}
+
+// Modal
+
+// Get the modal
+const modal = document.querySelector("#form-modal");
+
+// Get the button that opens the modal
+const modalBtn = document.querySelector("#modal-btn");
+
+// Get the <span> element that closes the modal
+const closeBtn = document.querySelector("#close-btn");
+
+// When the user clicks on the button, open the modal
+modalBtn.onclick = function() {
+  clearForm();
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+closeBtn.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
   }
 }

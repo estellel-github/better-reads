@@ -10,12 +10,13 @@
 </head>
 
 <body>
-  <h1>BetterBooks</h1>
-  <p>Keep track of your books with BetterBooks!</p>
-  <button id="modal-btn">Add a Book</button>
+  <h1>BetterReads</h1>
+  <p>Keep track of your books with BetterReads!</p>
+  <button id="modal-btn" class="modal-btn">Add a Book</button>
 
   <div id="form-modal" class="form-modal">
     <form class="form-modal-content">
+      <span id="close-btn" class="close-btn">&times;</span>
       <label for="title-input">Title</label>
       <input type="text" name="title-input" id="title-input" class="form text-field">
       <label for="author-input">Author</label>
@@ -23,7 +24,10 @@
       <label for="num-pages-input">Number of pages</label>
       <input type="number" name="num-pages-input" id="num-pages-input" class="form text-field">
       <label for="is-read-input">Already read?</label>
-      <input type="checkbox" name="is-read-input" id="is-read-input" class="form checkbox">
+      <input type="radio" name="is-read-input" id="is-read-radio" class="form radio-btn">
+      <label for="is-read-radio">Yes</label>
+      <input type="radio" name="is-read-input" id="is-unread-radio" class="form radio-btn">
+      <label for="is-unread-radio">No</label>
       <label>Rating</label>
       <div class="rating">
         <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
