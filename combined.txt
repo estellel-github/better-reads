@@ -1,0 +1,298 @@
+--------------------------
+Path: combined.txt
+
+
+--------------------------
+Path: index.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library</title>
+  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <h1></h1>
+  <form>
+    <label for="title-input">Title</label>
+    <input type="text" name="title-input" id="title-input" class="form text-field">
+    <label for="author-input">Author</label>
+    <input type="text" name="author-input" id="author-input" class="form text-field">
+    <label for="num-pages-input">Number of pages</label>
+    <input type="number" name="num-pages-input" id="num-pages-input" class="form text-field">
+    <label for="is-read-input">Already read?</label>
+    <input type="checkbox" name="is-read-input" id="is-read-input" class="form checkbox">
+    <label>Rating</label>
+    <div class="rating">
+      <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
+      <label for="star5">☆</label>
+      <input id="star4" name="star" type="radio" value="4" class="radio-btn hide" />
+      <label for="star4">☆</label>
+      <input id="star3" name="star" type="radio" value="3" class="radio-btn hide" />
+      <label for="star3">☆</label>
+      <input id="star2" name="star" type="radio" value="2" class="radio-btn hide" />
+      <label for="star2">☆</label>
+      <input id="star1" name="star" type="radio" value="1" class="radio-btn hide" />
+      <label for="star1">☆</label>
+      <div class="clear"></div>
+    </div>
+    <button type="submit" name="submit-btn" id="submit-btn" class="form button">Submit</button>
+  </form>
+  <div id="book-list" class="book-list">Book List</div>
+</body>
+
+</html>
+--------------------------
+Path: script.js
+
+// const theHobbit = new Book ("The Hobbit", "J.R.R. Tolkien", 295, false);
+
+// console.log(theHobbit.info());
+
+// console.log(Object.getPrototypeOf(theHobbit) === Book.prototype);
+
+// Book.prototype.getPages = function() {
+//   return `This book has ${this.numPages} pages.`
+// }
+
+// console.log(theHobbit.getPages());
+
+// TESTS: Adding book objects to arrays
+// const randomBook = new Book ("N/A", "N/A", 0, true);
+// library.push(randomBook);
+// const theHobbit = new Book ("The Hobbit", "J.R.R. Tolkien", 295, false);
+// library.push(theHobbit);
+
+// console.log(library);
+// console.log(randomBook.info());
+// console.log(theHobbit.info());
+
+const titleInput = document.querySelector("#title-input");
+const authorInput = document.querySelector("#author-input");
+const numPagesInput = document.querySelector("#num-pages-input");
+const isReadInput = document.querySelector("#is-read-input");
+const submitBtn = document.querySelector("#submit-btn");
+const bookList = document.querySelector("#book-list");
+
+function Book(title, author, numPages, isRead) {
+  this.title = title;
+  this.author = author;
+  this.numPages = numPages;
+  this.isRead = isRead;
+  this.info = function () {
+    return `${this.title} by ${this.author}, ${this.numPages} pages, ${this.isRead}`;
+  };
+}
+
+const library = [];
+
+function getBookInput() {
+  const title = titleInput.value;
+  const author = authorInput.value;
+  const numPages = numPagesInput.value;
+  const isRead = isReadInput.checked;
+  return new Book(title, author, numPages, isRead);
+}
+
+function addNewBook() {
+  clearBookList();
+  const newBook = getBookInput();
+  library.push(newBook);
+  console.log(newBook.info());
+  console.table(library);
+  displayBookList();
+}
+
+function clearBookList() {
+  bookList.textContent = "";
+}
+
+submitBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  addNewBook();
+});
+
+function displayBookList() {
+  for (let book of library) {
+    const card = document.createElement("div");
+    const title = document.createElement("p");
+    const author = document.createElement("p");
+    const numPages = document.createElement("p");
+    const isRead = document.createElement("p");
+
+    card.classList.add("card");
+    title.classList.add("card-title");
+    author.classList.add("card-author");
+    numPages.classList.add("card-num-pages");
+    isRead.classList.add("card-is-read");
+    
+    title.textContent = book.title;
+    author.textContent = book.author;
+    numPages.textContent = `${book.numPages} pages`;
+    isRead.textContent = (book.isRead) ? "Already read" : "Not read yet";
+
+    card.append(title, author, numPages, isRead);
+    bookList.appendChild(card);
+  }
+}
+--------------------------
+Path: styles.css
+
+/* General body styling */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+/* Form styling */
+form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+/* Label styling */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* Input fields styling */
+input[type="text"],
+input[type="number"],
+input[type="checkbox"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Button styling */
+button {
+  background-color: #28a745; /* Green */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+/* Book list styling */
+#book-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Card styling for each book */
+.card {
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-title {
+  color: #007bff; /* Blue */
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-author {
+  color: #6c757d; /* Grey */
+  margin-bottom: 5px;
+}
+
+.card-num-pages {
+  color: #28a745; /* Green */
+  margin-bottom: 5px;
+}
+
+.card-is-read {
+  font-style: italic;
+  color: #dc3545; /* Red */
+  margin-bottom: 5px;
+}
+
+/* RATINGS */
+
+.txt-center {
+  text-align: center;
+}
+.hide {
+  display: none;
+}
+
+.clear {
+  float: none;
+  clear: both;
+}
+
+.rating {
+  width: 90px;
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  text-align: center;
+  position: relative;
+}
+
+.rating > label {
+  float: right;
+  display: inline;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  width: 1.1em;
+  cursor: pointer;
+  color: #000;
+}
+
+.rating > label:hover,
+.rating > label:hover ~ label,
+.rating > input.radio-btn:checked ~ label {
+  color: transparent;
+}
+
+.rating > label:hover:before,
+.rating > label:hover ~ label:before,
+.rating > input.radio-btn:checked ~ label:before,
+.rating > input.radio-btn:checked ~ label:before {
+  content: "\2605";
+  position: absolute;
+  left: 0;
+  color: #FFD700;
+}
+--------------------------
+Path: tempCodeRunnerFile.js
+
+
+}
