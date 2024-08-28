@@ -98,6 +98,10 @@ button:hover {
   margin-bottom: 5px;
 }
 
+.card-rating {
+  margin-bottom: 5px;
+}
+
 /* RATINGS */
 
 .txt-center {
@@ -145,4 +149,24 @@ button:hover {
   position: absolute;
   left: 0;
   color: #FFD700;
+}
+
+/* Star rating display */
+.star-rating-filled, .star-rating-unfilled {
+  /* display: inline-block; */
+  position: relative;
+  width: 1.1em;
+}
+
+.star-rating-filled::before, .star-rating-unfilled::before {
+  content: "★"; /* This sets the star character */
+  /* position: absolute; */
+}
+
+.star-rating-filled::before {
+  color: #f5b505; /* Yellow color for filled stars */
+}
+
+.star-rating-unfilled::before {
+  color: #a3a3a3; /* Transparent color for unfilled stars */
 }
