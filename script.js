@@ -119,6 +119,8 @@ function displayBookList() {
     img.alt = `Cover of ${book.title}`;
 
     card.classList.add("card");
+    card.classList.add("loading-effect");
+
     title.classList.add("card-title");
     author.classList.add("card-author");
     year.classList.add("card-year");
@@ -136,9 +138,14 @@ function displayBookList() {
     card.append(img, title, author, year, numPages, rating, buttonBox);
     buttonBox.append(toggleReadBtn, removeBtn);
     bookList.appendChild(card);
+
+    card.addEventListener('animationend', () => {
+      card.classList.remove("loading-effect");
+    });
   }
   storeToLocal();
   displayStats();
+  console.table(library);
 }
 
 function clearForm() {
@@ -218,8 +225,6 @@ window.onclick = function (event) {
     modal.style.display = "none";
   }
 };
-
-// FOR TESTING
 
 const sciFiBooksByWomen = [
   {
@@ -339,7 +344,6 @@ const sciFiBooksByWomen = [
 function storeToLocal() {
   const libraryJson = JSON.stringify(library);
   localStorage.setItem("library", libraryJson);
-  console.table(localStorage);
 }
 
 function retrieveBooks() {
@@ -378,6 +382,8 @@ function loadSampleLibrary() {
     );
     library.push(newBook);
   });
+  loadBtn.textContent = "";
+  loadBtn.textContent = "🚀 Reload Sample Library";
   displayBookList();
 }
 
