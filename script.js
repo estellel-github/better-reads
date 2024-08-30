@@ -8,6 +8,8 @@ const ratingInput = () => document.querySelector('input[name="star"]:checked');
 const isReadRadio = document.querySelector("#is-read-radio");
 const submitBtn = document.querySelector("#submit-btn");
 
+const loadBtn = document.querySelector("#load-btn");
+
 const stats = document.querySelector("#stats");
 const bookList = document.querySelector("#book-list");
 
@@ -378,5 +380,7 @@ function loadSampleLibrary() {
   });
   displayBookList();
 }
+
+loadBtn.addEventListener("click", (e) => loadSampleLibrary());
 
 window.onload = retrieveBooks();
