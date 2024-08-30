@@ -1,4 +1,37 @@
 --------------------------
+Path: README.md
+
+# better-reads
+
+To Do
+===============
+
+**Library**
+- Your library is empty. Click + to add a book, or display our template library!
+- Add library stats:
+  - total books
+  - total authors
+  - read/unread
+- Add "Order by" option
+  - title
+  - author
+  - pages
+- Add "Delete all" option + Are you sure prompt?
+
+**Form**
+- Add more fields (language, publication date) to book object and input
+- Add possibility to add img, via url
+
+
+**Storage**
+- LocalStorage
+- Then: Firebase / auth with Google account
+
+Done
+===============
+
+
+--------------------------
 Path: combined.txt
 
 
@@ -17,60 +50,49 @@ Path: index.html
 </head>
 
 <body>
-  <h1></h1>
-  <form>
-    <label for="title-input">Title</label>
-    <input type="text" name="title-input" id="title-input" class="form text-field">
-    <label for="author-input">Author</label>
-    <input type="text" name="author-input" id="author-input" class="form text-field">
-    <label for="num-pages-input">Number of pages</label>
-    <input type="number" name="num-pages-input" id="num-pages-input" class="form text-field">
-    <label for="is-read-input">Already read?</label>
-    <input type="checkbox" name="is-read-input" id="is-read-input" class="form checkbox">
-    <label>Rating</label>
-    <div class="rating">
-      <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
-      <label for="star5">☆</label>
-      <input id="star4" name="star" type="radio" value="4" class="radio-btn hide" />
-      <label for="star4">☆</label>
-      <input id="star3" name="star" type="radio" value="3" class="radio-btn hide" />
-      <label for="star3">☆</label>
-      <input id="star2" name="star" type="radio" value="2" class="radio-btn hide" />
-      <label for="star2">☆</label>
-      <input id="star1" name="star" type="radio" value="1" class="radio-btn hide" />
-      <label for="star1">☆</label>
-      <div class="clear"></div>
-    </div>
-    <button type="submit" name="submit-btn" id="submit-btn" class="form button">Submit</button>
-  </form>
-  <div id="book-list" class="book-list">Book List</div>
+  <h1>BetterReads</h1>
+  <p>Keep track of your books with BetterReads!</p>
+  <button id="modal-btn" class="modal-btn">Add a Book</button>
+
+  <div id="form-modal" class="form-modal">
+    <form class="form-modal-content">
+      <span id="close-btn" class="close-btn">&times;</span>
+      <label for="title-input">Title</label>
+      <input type="text" name="title-input" id="title-input" class="form text-field">
+      <label for="author-input">Author</label>
+      <input type="text" name="author-input" id="author-input" class="form text-field">
+      <label for="num-pages-input">Number of pages</label>
+      <input type="number" name="num-pages-input" id="num-pages-input" class="form text-field">
+      <label for="is-read-input">Already read?</label>
+      <input type="radio" name="is-read-input" id="is-read-radio" class="form radio-btn">
+      <label for="is-read-radio">Yes</label>
+      <input type="radio" name="is-read-input" id="is-unread-radio" class="form radio-btn">
+      <label for="is-unread-radio">No</label>
+      <label>Rating</label>
+      <div class="rating">
+        <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
+        <label for="star5">☆</label>
+        <input id="star4" name="star" type="radio" value="4" class="radio-btn hide" />
+        <label for="star4">☆</label>
+        <input id="star3" name="star" type="radio" value="3" class="radio-btn hide" />
+        <label for="star3">☆</label>
+        <input id="star2" name="star" type="radio" value="2" class="radio-btn hide" />
+        <label for="star2">☆</label>
+        <input id="star1" name="star" type="radio" value="1" class="radio-btn hide" />
+        <label for="star1">☆</label>
+        <div class="clear"></div>
+      </div>
+      <button type="submit" name="submit-btn" id="submit-btn" class="form button">Submit</button>
+    </form>
+  </div>
+
+  <h2 id="book-list" class="book-list">Your Books</h2>
+
 </body>
 
 </html>
 --------------------------
 Path: script.js
-
-// const theHobbit = new Book ("The Hobbit", "J.R.R. Tolkien", 295, false);
-
-// console.log(theHobbit.info());
-
-// console.log(Object.getPrototypeOf(theHobbit) === Book.prototype);
-
-// Book.prototype.getPages = function() {
-//   return `This book has ${this.numPages} pages.`
-// }
-
-// console.log(theHobbit.getPages());
-
-// TESTS: Adding book objects to arrays
-// const randomBook = new Book ("N/A", "N/A", 0, true);
-// library.push(randomBook);
-// const theHobbit = new Book ("The Hobbit", "J.R.R. Tolkien", 295, false);
-// library.push(theHobbit);
-
-// console.log(library);
-// console.log(randomBook.info());
-// console.log(theHobbit.info());
 
 const titleInput = document.querySelector("#title-input");
 const authorInput = document.querySelector("#author-input");
@@ -79,8 +101,11 @@ const isReadInput = document.querySelector("#is-read-input");
 const ratingInput = () => document.querySelector('input[name="star"]:checked');
 const submitBtn = document.querySelector("#submit-btn");
 const bookList = document.querySelector("#book-list");
+const isReadRadio = document.querySelector("#is-read-radio");
 
-let bookIdCounter = 0;
+let library = [];
+
+let bookIdCounter = library.length;
 
 function Book(title, author, numPages, isRead, rating) {
   this.id = bookIdCounter++;
@@ -95,17 +120,15 @@ function Book(title, author, numPages, isRead, rating) {
     }, rating: ${this.rating}`;
   };
   this.toggleReadStatus = function () {
-    (isRead) ? isRead = false : isRead = true;
+    this.isRead = !this.isRead;
   }
 }
-
-let library = [];
 
 function getBookInput() {
   const title = titleInput.value ? titleInput.value : "N/A";
   const author = authorInput.value ? authorInput.value : "N/A";
   const numPages = numPagesInput.value ? numPagesInput.value : "N/A";
-  const isRead = isReadInput.checked;
+  const isRead = isReadRadio.checked ? true : false;
   const rating = ratingInput() ? ratingInput().value : "No rating";
   return new Book(title, author, numPages, isRead, rating);
 }
@@ -126,6 +149,7 @@ function clearBookList() {
 submitBtn.addEventListener("click", (e) => {
   e.preventDefault();
   addNewBook();
+  modal.style.display = "none";
 });
 
 function createStarRating(rating) {
@@ -161,13 +185,13 @@ function displayBookList() {
     });
 
     toggleReadBtn.textContent = book.isRead ? "Set as unread" : "Set as read";
+
     toggleReadBtn.addEventListener("click", () => {
       book.toggleReadStatus();
       displayBookList();
     });
 
     card.classList.add("card");
-    card.dataset.libraryIndex = book.id;
     title.classList.add("card-title");
     author.classList.add("card-author");
     numPages.classList.add("card-num-pages");
@@ -184,16 +208,107 @@ function displayBookList() {
   }
 }
 
+function clearForm() {
+  titleInput.value = "";
+  authorInput.value = "";
+  numPagesInput.value = null;
+  isReadRadio.checked = true;
+  ratingInput.value = 1;
+}
+
+// Modal
+
+// Get the modal
+const modal = document.querySelector("#form-modal");
+
+// Get the button that opens the modal
+const modalBtn = document.querySelector("#modal-btn");
+
+// Get the <span> element that closes the modal
+const closeBtn = document.querySelector("#close-btn");
+
+// When the user clicks on the button, open the modal
+modalBtn.onclick = function() {
+  clearForm();
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+closeBtn.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+
+// FOR TESTING
+
+const sciFiBooksByWomen = [
+  { title: "Kindred", author: "Octavia E. Butler" },
+  { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin" },
+  { title: "Parable of the Sower", author: "Octavia E. Butler" },
+  { title: "Ancillary Justice", author: "Ann Leckie" },
+  { title: "Dawn", author: "Octavia E. Butler" },
+  { title: "The Power", author: "Naomi Alderman" },
+  { title: "Frankenstein", author: "Mary Shelley" },
+  { title: "The Hunger Games", author: "Suzanne Collins" },
+  { title: "Shards of Honor", author: "Lois McMaster Bujold" },
+  { title: "Who Fears Death", author: "Nnedi Okorafor" },
+  { title: "Binti", author: "Nnedi Okorafor" },
+  { title: "The Dispossessed", author: "Ursula K. Le Guin" },
+  { title: "Ammonite", author: "Nicola Griffith" },
+  { title: "Mirror Dance", author: "Lois McMaster Bujold" },
+  { title: "Grass", author: "Sheri S. Tepper" },
+  { title: "The Snow Queen", author: "Joan D. Vinge" },
+  { title: "Fledgling", author: "Octavia E. Butler" },
+  { title: "Oryx and Crake", author: "Margaret Atwood" },
+  { title: "The Handmaid's Tale", author: "Margaret Atwood" },
+  { title: "Memory", author: "Lois McMaster Bujold" },
+  { title: "Patternmaster", author: "Octavia E. Butler" },
+];
+
+function populateLibrary() {
+  sciFiBooksByWomen.forEach(book => {
+      const newBook = new Book(
+          book.title,
+          book.author,
+          Math.floor(Math.random() * 500) + 100,
+          Math.random() > 0.5,
+          Math.floor(Math.random() * 5) + 1,
+      );
+      library.push(newBook);
+  });
+  displayBookList();
+}
+
+window.onload = populateLibrary;
 --------------------------
 Path: styles.css
 
-/* General body styling */
+/* Resets and general */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  position: relative;
+  height: 100dvh;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f4f4;
+}
+
+h1 {
   margin: 0;
-  padding: 20px;
-  color: #333;
+  color: #585858;
 }
 
 /* Form styling */
@@ -358,6 +473,44 @@ button:hover {
 
 .star-rating-unfilled::before {
   color: #a3a3a3; /* Transparent color for unfilled stars */
+}
+
+/* The Modal (background) */
+.form-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.form-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 --------------------------
 Path: tempCodeRunnerFile.js

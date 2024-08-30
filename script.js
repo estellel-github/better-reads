@@ -78,17 +78,20 @@ function displayBookList() {
     const numPages = document.createElement("p");
     const isRead = document.createElement("p");
     const rating = createStarRating(book.rating);
+    const buttonBox = document.createElement("buttonBox");
     const toggleReadBtn = document.createElement("button");
     const removeBtn = document.createElement("button");
     
     removeBtn.id = "remove-btn-" + i;
-    removeBtn.textContent = "Remove";
+    removeBtn.textContent = "🗑 Remove";
     removeBtn.addEventListener("click", () => {
       library = library.filter((item) => item.id !== book.id);
       displayBookList();
     });
 
-    toggleReadBtn.textContent = book.isRead ? "Set as unread" : "Set as read";
+    toggleReadBtn.textContent = book.isRead ? "Mark as unread" : "Mark as read";
+
+    book.isRead ? toggleReadBtn.classList.add("toggle-read", "btn-small", "red") : toggleReadBtn.classList.add("toggle-read", "btn-small", "green");
 
     toggleReadBtn.addEventListener("click", () => {
       book.toggleReadStatus();
@@ -101,13 +104,15 @@ function displayBookList() {
     numPages.classList.add("card-num-pages");
     isRead.classList.add("card-is-read");
     rating.classList.add("card-rating");
-    removeBtn.classList.add("remove-btn");
+    removeBtn.classList.add("remove-btn", "btn-small");
+    buttonBox.classList.add("buttonBox")
 
     title.textContent = book.title;
     author.textContent = book.author;
     numPages.textContent = `${book.numPages} pages`;
-    isRead.textContent = book.isRead ? "Already read" : "Not read yet";
-    card.append(title, author, numPages, isRead, toggleReadBtn, rating, removeBtn);
+    // isRead.textContent = book.isRead ? "Already read" : "Not read yet";
+    card.append(title, author, numPages, rating, isRead, buttonBox);
+    buttonBox.append(toggleReadBtn, removeBtn);
     bookList.appendChild(card);
   }
 }

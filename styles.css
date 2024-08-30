@@ -1,10 +1,53 @@
-/* General body styling */
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f4f4;
+/* Resets and general */
+* {
+  box-sizing: border-box;
+  padding: 0;
   margin: 0;
-  padding: 20px;
+}
+
+html {
+  position: relative;
+  height: 100dvh;
+}
+
+body {
+  font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f9;
   color: #333;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #333;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+hr {
+  border-top: 1px solid rgb(206, 206, 206);
+  align-self: stretch;
+  margin: 1rem;
+}
+
+h1 + p {
+  margin-bottom: 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.invisible {
+  visibility: none;
 }
 
 /* Form styling */
@@ -14,6 +57,8 @@ form {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Label styling */
@@ -34,9 +79,30 @@ input[type="checkbox"] {
   border-radius: 4px;
 }
 
+.form.button {
+  align-self: flex-end;
+}
+
+.is-read-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.radio-btn {
+  height: 100%;
+  margin-top: -5px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.radio-btn + label {
+  margin-right: 10px;
+}
+
 /* Button styling */
 button {
-  background-color: #28a745; /* Green */
+  background-color: #3b82f6;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -45,10 +111,41 @@ button {
   font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
+  display: flex;
+  justify-content: center;
 }
 
 button:hover {
-  background-color: #218838;
+  background-color: #1f73fa;
+}
+
+button.btn-small {
+  background-color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border: 2px solid;
+}
+
+button.btn-small.red {
+  border: 1px solid lightgrey;
+  color: #6e1010;
+  border-color: #6e1010;
+}
+
+button.btn-small.green {
+  border: 1px solid lightgrey;
+  color: #11752f;
+  border-color: #087a2a;
+}
+
+button.btn-small.red:hover, button.btn-small.green:hover {
+  opacity: 90%;
+}
+
+.buttonBox {
+  display: flex;
+  justify-content: space-between;
 }
 
 /* Book list styling */
@@ -56,50 +153,62 @@ button:hover {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: 20px;
-  background: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  align-self: stretch;
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
 }
 
 /* Card styling for each book */
 .card {
-  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  background: white;
   padding: 15px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   transition: transform 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card-title {
-  color: #007bff; /* Blue */
-  font-size: 18px;
+  font-size: clamp(24px, 1rem, 30px);
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .card-author {
-  color: #6c757d; /* Grey */
+  color: #424242;
+  font-weight: bold;
+  margin-bottom: 5px;
+  border-bottom: 1px solid lightgrey;
+}
+
+.card-rating {
+  font-size: 2rem;
   margin-bottom: 5px;
 }
 
 .card-num-pages {
-  color: #28a745; /* Green */
+  font-size: 0.9rem;
   margin-bottom: 5px;
 }
 
 .card-is-read {
   font-style: italic;
-  color: #dc3545; /* Red */
+  color: #5e5c5d;
   margin-bottom: 5px;
 }
 
-.card-rating {
-  margin-bottom: 5px;
+.card .remove-btn {
+  float: right;
+  font-weight: bold;
+  color: grey;
+  border: 1px solid grey;
+}
+
+.card .remove-btn:hover{
+  background-color: rgb(245, 244, 244);
 }
 
 /* RATINGS */
@@ -191,13 +300,13 @@ button:hover {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: clamp(400px, 80%, 500px); /* Could be more or less, depending on screen size */
 }
 
 /* The Close Button */
 .close-btn {
   color: #aaa;
-  float: right;
+  align-self: flex-end;
   font-size: 28px;
   font-weight: bold;
 }
