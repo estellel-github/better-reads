@@ -13,6 +13,7 @@ To Do
   - title
   - author
   - pages
+- Add "Filter" option
 - Add "Delete all" option + Are you sure prompt?
 
 **Form**

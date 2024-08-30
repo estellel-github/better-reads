@@ -1,5 +1,6 @@
 const titleInput = document.querySelector("#title-input");
 const authorInput = document.querySelector("#author-input");
+const yearInput = document.querySelector("#year-input");
 const numPagesInput = document.querySelector("#num-pages-input");
 const isReadInput = document.querySelector("#is-read-input");
 const ratingInput = () => document.querySelector('input[name="star"]:checked');
@@ -11,10 +12,11 @@ let library = [];
 
 let bookIdCounter = library.length;
 
-function Book(title, author, numPages, isRead, rating) {
+function Book(title, author, year, numPages, isRead, rating) {
   this.id = bookIdCounter++;
   this.title = title;
   this.author = author;
+  this.year = year;
   this.numPages = numPages;
   this.isRead = isRead;
   this.rating = rating;
@@ -31,10 +33,11 @@ function Book(title, author, numPages, isRead, rating) {
 function getBookInput() {
   const title = titleInput.value ? titleInput.value : "N/A";
   const author = authorInput.value ? authorInput.value : "N/A";
+  const year = yearInput.value ? yearInput.value : "N/A";
   const numPages = numPagesInput.value ? numPagesInput.value : "N/A";
   const isRead = isReadRadio.checked ? true : false;
   const rating = ratingInput() ? ratingInput().value : "No rating";
-  return new Book(title, author, numPages, isRead, rating);
+  return new Book(title, author, year, numPages, isRead, rating);
 }
 
 function addNewBook() {
@@ -75,6 +78,7 @@ function displayBookList() {
     const card = document.createElement("div");
     const title = document.createElement("p");
     const author = document.createElement("p");
+    const year = document.createElement("p");
     const numPages = document.createElement("p");
     const isRead = document.createElement("p");
     const rating = createStarRating(book.rating);
@@ -101,6 +105,7 @@ function displayBookList() {
     card.classList.add("card");
     title.classList.add("card-title");
     author.classList.add("card-author");
+    year.classList.add("card-year");
     numPages.classList.add("card-num-pages");
     isRead.classList.add("card-is-read");
     rating.classList.add("card-rating");
@@ -110,8 +115,9 @@ function displayBookList() {
     title.textContent = book.title;
     author.textContent = book.author;
     numPages.textContent = `${book.numPages} pages`;
+    year.textContent = "Year of publication: " + book.year;
     // isRead.textContent = book.isRead ? "Already read" : "Not read yet";
-    card.append(title, author, numPages, rating, isRead, buttonBox);
+    card.append(title, author, year, numPages, rating, isRead, buttonBox);
     buttonBox.append(toggleReadBtn, removeBtn);
     bookList.appendChild(card);
   }
@@ -120,6 +126,7 @@ function displayBookList() {
 function clearForm() {
   titleInput.value = "";
   authorInput.value = "";
+  yearInput.value = "";
   numPagesInput.value = null;
   isReadRadio.checked = true;
   ratingInput.value = 1;
@@ -158,27 +165,27 @@ window.onclick = function(event) {
 // FOR TESTING
 
 const sciFiBooksByWomen = [
-  { title: "Kindred", author: "Octavia E. Butler" },
-  { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin" },
-  { title: "Parable of the Sower", author: "Octavia E. Butler" },
-  { title: "Ancillary Justice", author: "Ann Leckie" },
-  { title: "Dawn", author: "Octavia E. Butler" },
-  { title: "The Power", author: "Naomi Alderman" },
-  { title: "Frankenstein", author: "Mary Shelley" },
-  { title: "The Hunger Games", author: "Suzanne Collins" },
-  { title: "Shards of Honor", author: "Lois McMaster Bujold" },
-  { title: "Who Fears Death", author: "Nnedi Okorafor" },
-  { title: "Binti", author: "Nnedi Okorafor" },
-  { title: "The Dispossessed", author: "Ursula K. Le Guin" },
-  { title: "Ammonite", author: "Nicola Griffith" },
-  { title: "Mirror Dance", author: "Lois McMaster Bujold" },
-  { title: "Grass", author: "Sheri S. Tepper" },
-  { title: "The Snow Queen", author: "Joan D. Vinge" },
-  { title: "Fledgling", author: "Octavia E. Butler" },
-  { title: "Oryx and Crake", author: "Margaret Atwood" },
-  { title: "The Handmaid's Tale", author: "Margaret Atwood" },
-  { title: "Memory", author: "Lois McMaster Bujold" },
-  { title: "Patternmaster", author: "Octavia E. Butler" },
+  { title: "Kindred", author: "Octavia E. Butler", year: 1979 },
+  { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin", year: 1969 },
+  { title: "Parable of the Sower", author: "Octavia E. Butler", year: 1993 },
+  { title: "Ancillary Justice", author: "Ann Leckie", year: 2013 },
+  { title: "Dawn", author: "Octavia E. Butler", year: 1987 },
+  { title: "The Power", author: "Naomi Alderman", year: 2016 },
+  { title: "Frankenstein", author: "Mary Shelley", year: 1818 },
+  { title: "The Hunger Games", author: "Suzanne Collins", year: 2008 },
+  { title: "Shards of Honor", author: "Lois McMaster Bujold", year: 1986 },
+  { title: "Who Fears Death", author: "Nnedi Okorafor", year: 2010 },
+  { title: "Binti", author: "Nnedi Okorafor", year: 2015 },
+  { title: "The Dispossessed", author: "Ursula K. Le Guin", year: 1974 },
+  { title: "Ammonite", author: "Nicola Griffith", year: 1992 },
+  { title: "Mirror Dance", author: "Lois McMaster Bujold", year: 1994 },
+  { title: "Grass", author: "Sheri S. Tepper", year: 1989 },
+  { title: "The Snow Queen", author: "Joan D. Vinge", year: 1980 },
+  { title: "Fledgling", author: "Octavia E. Butler", year: 2005 },
+  { title: "Oryx and Crake", author: "Margaret Atwood", year: 2003 },
+  { title: "The Handmaid's Tale", author: "Margaret Atwood", year: 1985 },
+  { title: "Memory", author: "Lois McMaster Bujold", year: 1996 },
+  { title: "Patternmaster", author: "Octavia E. Butler", year: 1976 },
 ];
 
 function populateLibrary() {
@@ -186,6 +193,7 @@ function populateLibrary() {
       const newBook = new Book(
           book.title,
           book.author,
+          book.year,
           Math.floor(Math.random() * 500) + 100,
           Math.random() > 0.5,
           Math.floor(Math.random() * 5) + 1,

@@ -184,6 +184,10 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   border-bottom: 1px solid lightgrey;
 }
 
+.card-year {
+  font-size: 0.9rem;
+}
+
 .card-rating {
   font-size: 2rem;
   margin-bottom: 5px;
@@ -226,16 +230,17 @@ button.btn-small.red:hover, button.btn-small.green:hover {
 }
 
 .rating {
-  width: 90px;
+  width: 120px;
   unicode-bidi: bidi-override;
   direction: rtl;
-  text-align: center;
+  text-align: left;
   position: relative;
 }
 
 .rating > label {
   float: right;
   display: inline;
+  font-size: 1.2rem;
   padding: 0;
   margin: 0;
   position: relative;
@@ -257,7 +262,7 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   content: "\2605";
   position: absolute;
   left: 0;
-  color: #FFD700;
+  color: #f39406;
 }
 
 /* Star rating display */
@@ -273,7 +278,7 @@ button.btn-small.red:hover, button.btn-small.green:hover {
 }
 
 .star-rating-filled::before {
-  color: #f5b505; /* Yellow color for filled stars */
+  color: #f39406; /* Yellow color for filled stars */
 }
 
 .star-rating-unfilled::before {
@@ -297,10 +302,10 @@ button.btn-small.red:hover, button.btn-small.green:hover {
 /* Modal Content/Box */
 .form-modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: clamp(400px, 80%, 500px); /* Could be more or less, depending on screen size */
+  width: clamp(350px, 80%, 500px);
 }
 
 /* The Close Button */

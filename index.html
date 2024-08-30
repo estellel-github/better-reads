@@ -24,13 +24,15 @@
       <input type="text" name="author-input" id="author-input" class="form text-field">
       <label for="num-pages-input">Number of pages</label>
       <input type="number" name="num-pages-input" id="num-pages-input" class="form text-field">
+      <label for="year-input">Year of Publication</label>
+      <input type="number" name="year-input" id="year-input" class="form text-field">
       <label for="is-read-input">Already read?</label>
       <div id="is-read-wrapper" class="is-read-wrapper">
-      <input type="radio" name="is-read-input" id="is-read-radio" class="form radio-btn">
-      <label for="is-read-radio">Yes</label>
-      <input type="radio" name="is-read-input" id="is-unread-radio" class="form radio-btn">
-      <label for="is-unread-radio">No</label>
-    </div>
+        <input type="radio" name="is-read-input" id="is-read-radio" class="form radio-btn">
+        <label for="is-read-radio">Yes</label>
+        <input type="radio" name="is-read-input" id="is-unread-radio" class="form radio-btn">
+        <label for="is-unread-radio">No</label>
+      </div>
       <label>Rating</label>
       <div class="rating">
         <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
@@ -54,8 +56,11 @@
     <p>Keep track of your books with BetterReads!</p>
     <button id="modal-btn" class="modal-btn">+ Add a Book</button>
     <hr>
+    <h2>Stats</h2>
+    <section id="stats" class="stats"></section>
+    <hr>
     <h2>Your Books</h2>
-    <div id="book-list" class="book-list"></div>
+    <section id="book-list" class="book-list"></section>
   </div>
 </body>
 
