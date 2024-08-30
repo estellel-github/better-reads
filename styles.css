@@ -71,7 +71,8 @@ label {
 /* Input fields styling */
 input[type="text"],
 input[type="number"],
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="url"] {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -170,6 +171,14 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.card > img {
+  width: 150px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 3px 20px 10px 3px;
+  filter: drop-shadow(5px 5px 4px #bfbfc0);
 }
 
 .card-title {

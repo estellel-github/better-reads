@@ -3,6 +3,7 @@ const authorInput = document.querySelector("#author-input");
 const yearInput = document.querySelector("#year-input");
 const numPagesInput = document.querySelector("#num-pages-input");
 const isReadInput = document.querySelector("#is-read-input");
+const imgUrlInput = document.querySelector("#img-url-input");
 const ratingInput = () => document.querySelector('input[name="star"]:checked');
 const submitBtn = document.querySelector("#submit-btn");
 const bookList = document.querySelector("#book-list");
@@ -12,7 +13,7 @@ let library = [];
 
 let bookIdCounter = library.length;
 
-function Book(title, author, year, numPages, isRead, rating) {
+function Book(title, author, year, numPages, isRead, rating, imgUrl) {
   this.id = bookIdCounter++;
   this.title = title;
   this.author = author;
@@ -20,14 +21,7 @@ function Book(title, author, year, numPages, isRead, rating) {
   this.numPages = numPages;
   this.isRead = isRead;
   this.rating = rating;
-  this.info = function () {
-    return `${this.title} by ${this.author}, ${this.numPages} pages, read: ${
-      this.isRead ? "Yes" : "No"
-    }, rating: ${this.rating}`;
-  };
-  this.toggleReadStatus = function () {
-    this.isRead = !this.isRead;
-  }
+  this.imgUrl = imgUrl || 'default-book-img.png';
 }
 
 function getBookInput() {
@@ -37,14 +31,15 @@ function getBookInput() {
   const numPages = numPagesInput.value ? numPagesInput.value : "N/A";
   const isRead = isReadRadio.checked ? true : false;
   const rating = ratingInput() ? ratingInput().value : "No rating";
-  return new Book(title, author, year, numPages, isRead, rating);
+  const imgUrl = imgUrlInput.value;
+  return new Book(title, author, year, numPages, isRead, rating, imgUrl);
 }
 
 function addNewBook() {
   clearBookList();
   const newBook = getBookInput();
   library.push(newBook);
-  console.log(newBook.info());
+  // console.log(parseInt(newBook.info()));
   console.table(library);
   displayBookList();
 }
@@ -78,6 +73,7 @@ function displayBookList() {
     const card = document.createElement("div");
     const title = document.createElement("p");
     const author = document.createElement("p");
+    const img = document.createElement("img");
     const year = document.createElement("p");
     const numPages = document.createElement("p");
     const isRead = document.createElement("p");
@@ -102,6 +98,9 @@ function displayBookList() {
       displayBookList();
     });
 
+    img.src = book.imgUrl;
+    img.alt = `Cover of ${book.title}`;
+
     card.classList.add("card");
     title.classList.add("card-title");
     author.classList.add("card-author");
@@ -117,7 +116,7 @@ function displayBookList() {
     numPages.textContent = `${book.numPages} pages`;
     year.textContent = "Year of publication: " + book.year;
     // isRead.textContent = book.isRead ? "Already read" : "Not read yet";
-    card.append(title, author, year, numPages, rating, isRead, buttonBox);
+    card.append(img, title, author, year, numPages, rating, isRead, buttonBox);
     buttonBox.append(toggleReadBtn, removeBtn);
     bookList.appendChild(card);
   }
@@ -165,27 +164,22 @@ window.onclick = function(event) {
 // FOR TESTING
 
 const sciFiBooksByWomen = [
-  { title: "Kindred", author: "Octavia E. Butler", year: 1979 },
-  { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin", year: 1969 },
-  { title: "Parable of the Sower", author: "Octavia E. Butler", year: 1993 },
-  { title: "Ancillary Justice", author: "Ann Leckie", year: 2013 },
-  { title: "Dawn", author: "Octavia E. Butler", year: 1987 },
-  { title: "The Power", author: "Naomi Alderman", year: 2016 },
-  { title: "Frankenstein", author: "Mary Shelley", year: 1818 },
-  { title: "The Hunger Games", author: "Suzanne Collins", year: 2008 },
-  { title: "Shards of Honor", author: "Lois McMaster Bujold", year: 1986 },
-  { title: "Who Fears Death", author: "Nnedi Okorafor", year: 2010 },
-  { title: "Binti", author: "Nnedi Okorafor", year: 2015 },
-  { title: "The Dispossessed", author: "Ursula K. Le Guin", year: 1974 },
-  { title: "Ammonite", author: "Nicola Griffith", year: 1992 },
-  { title: "Mirror Dance", author: "Lois McMaster Bujold", year: 1994 },
-  { title: "Grass", author: "Sheri S. Tepper", year: 1989 },
-  { title: "The Snow Queen", author: "Joan D. Vinge", year: 1980 },
-  { title: "Fledgling", author: "Octavia E. Butler", year: 2005 },
-  { title: "Oryx and Crake", author: "Margaret Atwood", year: 2003 },
-  { title: "The Handmaid's Tale", author: "Margaret Atwood", year: 1985 },
-  { title: "Memory", author: "Lois McMaster Bujold", year: 1996 },
-  { title: "Patternmaster", author: "Octavia E. Butler", year: 1976 },
+  { title: "Kindred", author: "Octavia E. Butler", year: 1979, imgUrl: "https://upload.wikimedia.org/wikipedia/en/5/57/OctaviaEButler_Kindred.jpg" },
+  { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin", year: 1969, imgUrl: "https://m.media-amazon.com/images/I/81eTMHvXZqL._AC_UF1000,1000_QL80_.jpg" },
+  { title: "Parable of the Sower", author: "Octavia E. Butler", year: 1993, imgUrl: "https://m.media-amazon.com/images/I/81cccWWMQmL._AC_UF894,1000_QL80_.jpg" },
+  { title: "Ancillary Justice", author: "Ann Leckie", year: 2013, imgUrl: "https://www.orbitbooks.net/wp-content/uploads/2013/06/Leckie_AncillaryJustice_TP.jpg" },
+  { title: "Dawn", author: "Octavia E. Butler", year: 1987, imgUrl: "https://m.media-amazon.com/images/I/61jVFGXNLnL._AC_UF894,1000_QL80_.jpg" },
+  { title: "Frankenstein", author: "Mary Shelley", year: 1818, imgUrl: "https://www.printmag.com/wp-content/uploads/2017/10/2a34d8_737fd003c63b4109909e4f589704a4c2mv2.jpg" },
+  { title: "Shards of Honor", author: "Lois McMaster Bujold", year: 1986, imgUrl: "https://upload.wikimedia.org/wikipedia/en/f/fa/Shards_of_honor_cover.jpg" },
+  { title: "Who Fears Death", author: "Nnedi Okorafor", year: 2010, imgUrl: "https://m.media-amazon.com/images/I/71fYaW9Q9RL._AC_UF894,1000_QL80_.jpg" },
+  { title: "The Dispossessed", author: "Ursula K. Le Guin", year: 1974, imgUrl: "https://m.media-amazon.com/images/I/914nOgluTAL._AC_UF894,1000_QL80_.jpg" },
+  { title: "Ammonite", author: "Nicola Griffith", year: 1992, imgUrl: "https://m.media-amazon.com/images/I/61EWjbnkKhL._AC_UF1000,1000_QL80_.jpg" },
+  { title: "Mirror Dance", author: "Lois McMaster Bujold", year: 1994, imgUrl: "https://upload.wikimedia.org/wikipedia/en/0/05/Mirrordancecover.jpg" },
+  { title: "The Snow Queen", author: "Joan D. Vinge", year: 1980, imgUrl: "https://upload.wikimedia.org/wikipedia/en/a/a7/TheSnowQueen%281stEd%29.jpg" },
+  { title: "Fledgling", author: "Octavia E. Butler", year: 2005, imgUrl: "https://m.media-amazon.com/images/I/81u6EGJRNhL._AC_UF894,1000_QL80_.jpg" },
+  { title: "Oryx and Crake", author: "Margaret Atwood", year: 2003, imgUrl: "https://m.media-amazon.com/images/I/710lFK3q6yL._AC_UF1000,1000_QL80_.jpg" },
+  { title: "The Handmaid's Tale", author: "Margaret Atwood", year: 1985, imgUrl: "https://upload.wikimedia.org/wikipedia/en/thumb/1/18/TheHandmaidsTale%281stEd%29.jpg/220px-TheHandmaidsTale%281stEd%29.jpg" },
+  { title: "Her Smoke Rose Up Forever", author: "James Tiptree, Jr.", year: 1990, imgUrl: "https://upload.wikimedia.org/wikipedia/en/6/62/Her_smoke_rose_up_forever.jpg" },
 ];
 
 function populateLibrary() {
@@ -197,6 +191,7 @@ function populateLibrary() {
           Math.floor(Math.random() * 500) + 100,
           Math.random() > 0.5,
           Math.floor(Math.random() * 5) + 1,
+          book.imgUrl,
       );
       library.push(newBook);
   });

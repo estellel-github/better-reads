@@ -16,10 +16,10 @@ To Do
   - title
   - author
   - pages
+- Add "Filter" option
 - Add "Delete all" option + Are you sure prompt?
 
 **Form**
-- Add more fields (language, publication date) to book object and input
 - Add possibility to add img, via url
 
 
@@ -30,7 +30,7 @@ To Do
 Done
 ===============
 
-
+- Add publication date to book object and input
 --------------------------
 Path: combined.txt
 
@@ -47,13 +47,14 @@ Path: index.html
   <title>Library</title>
   <script defer src="script.js"></script>
   <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet">
 </head>
 
 <body>
-  <h1>BetterReads</h1>
-  <p>Keep track of your books with BetterReads!</p>
-  <button id="modal-btn" class="modal-btn">Add a Book</button>
-
   <div id="form-modal" class="form-modal">
     <form class="form-modal-content">
       <span id="close-btn" class="close-btn">&times;</span>
@@ -63,11 +64,17 @@ Path: index.html
       <input type="text" name="author-input" id="author-input" class="form text-field">
       <label for="num-pages-input">Number of pages</label>
       <input type="number" name="num-pages-input" id="num-pages-input" class="form text-field">
+      <label for="year-input">Year of Publication</label>
+      <input type="number" name="year-input" id="year-input" class="form text-field">
+      <label for="img-url-input">Book Cover URL</label>
+<input type="url" name="img-url-input" id="img-url-input" class="form url-field">
       <label for="is-read-input">Already read?</label>
-      <input type="radio" name="is-read-input" id="is-read-radio" class="form radio-btn">
-      <label for="is-read-radio">Yes</label>
-      <input type="radio" name="is-read-input" id="is-unread-radio" class="form radio-btn">
-      <label for="is-unread-radio">No</label>
+      <div id="is-read-wrapper" class="is-read-wrapper">
+        <input type="radio" name="is-read-input" id="is-read-radio" class="form radio-btn">
+        <label for="is-read-radio">Yes</label>
+        <input type="radio" name="is-read-input" id="is-unread-radio" class="form radio-btn">
+        <label for="is-unread-radio">No</label>
+      </div>
       <label>Rating</label>
       <div class="rating">
         <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
@@ -86,8 +93,17 @@ Path: index.html
     </form>
   </div>
 
-  <h2 id="book-list" class="book-list">Your Books</h2>
-
+  <div id="container" class="container">
+    <h1>📖 BetterReads</h1>
+    <p>Keep track of your books with BetterReads!</p>
+    <button id="modal-btn" class="modal-btn">+ Add a Book</button>
+    <hr>
+    <h2>Stats</h2>
+    <section id="stats" class="stats"></section>
+    <hr>
+    <h2>Your Books</h2>
+    <section id="book-list" class="book-list"></section>
+  </div>
 </body>
 
 </html>
@@ -96,8 +112,10 @@ Path: script.js
 
 const titleInput = document.querySelector("#title-input");
 const authorInput = document.querySelector("#author-input");
+const yearInput = document.querySelector("#year-input");
 const numPagesInput = document.querySelector("#num-pages-input");
 const isReadInput = document.querySelector("#is-read-input");
+const imgUrlInput = document.querySelector("#img-url-input");
 const ratingInput = () => document.querySelector('input[name="star"]:checked');
 const submitBtn = document.querySelector("#submit-btn");
 const bookList = document.querySelector("#book-list");
@@ -107,37 +125,33 @@ let library = [];
 
 let bookIdCounter = library.length;
 
-function Book(title, author, numPages, isRead, rating) {
+function Book(title, author, year, numPages, isRead, rating, imgUrl) {
   this.id = bookIdCounter++;
   this.title = title;
   this.author = author;
+  this.year = year;
   this.numPages = numPages;
   this.isRead = isRead;
   this.rating = rating;
-  this.info = function () {
-    return `${this.title} by ${this.author}, ${this.numPages} pages, read: ${
-      this.isRead ? "Yes" : "No"
-    }, rating: ${this.rating}`;
-  };
-  this.toggleReadStatus = function () {
-    this.isRead = !this.isRead;
-  }
+  this.imgUrl = imgUrl || 'default-book-img.png';
 }
 
 function getBookInput() {
   const title = titleInput.value ? titleInput.value : "N/A";
   const author = authorInput.value ? authorInput.value : "N/A";
+  const year = yearInput.value ? yearInput.value : "N/A";
   const numPages = numPagesInput.value ? numPagesInput.value : "N/A";
   const isRead = isReadRadio.checked ? true : false;
   const rating = ratingInput() ? ratingInput().value : "No rating";
-  return new Book(title, author, numPages, isRead, rating);
+  const imgUrl = parseInt(imgUrlInput.value);
+  return new Book(title, author, year, numPages, isRead, rating, imgUrl);
 }
 
 function addNewBook() {
   clearBookList();
   const newBook = getBookInput();
   library.push(newBook);
-  console.log(newBook.info());
+  // console.log(parseInt(newBook.info()));
   console.table(library);
   displayBookList();
 }
@@ -171,39 +185,52 @@ function displayBookList() {
     const card = document.createElement("div");
     const title = document.createElement("p");
     const author = document.createElement("p");
+    const img = document.createElement("img");
+    const year = document.createElement("p");
     const numPages = document.createElement("p");
     const isRead = document.createElement("p");
     const rating = createStarRating(book.rating);
+    const buttonBox = document.createElement("buttonBox");
     const toggleReadBtn = document.createElement("button");
     const removeBtn = document.createElement("button");
     
     removeBtn.id = "remove-btn-" + i;
-    removeBtn.textContent = "Remove";
+    removeBtn.textContent = "🗑 Remove";
     removeBtn.addEventListener("click", () => {
       library = library.filter((item) => item.id !== book.id);
       displayBookList();
     });
 
-    toggleReadBtn.textContent = book.isRead ? "Set as unread" : "Set as read";
+    toggleReadBtn.textContent = book.isRead ? "Mark as unread" : "Mark as read";
+
+    book.isRead ? toggleReadBtn.classList.add("toggle-read", "btn-small", "red") : toggleReadBtn.classList.add("toggle-read", "btn-small", "green");
 
     toggleReadBtn.addEventListener("click", () => {
       book.toggleReadStatus();
       displayBookList();
     });
 
+    img.src = `${book.imageUrl}`;
+    img.alt = `Cover of ${book.title}`;
+    img.style.width = '100%';
+
     card.classList.add("card");
     title.classList.add("card-title");
     author.classList.add("card-author");
+    year.classList.add("card-year");
     numPages.classList.add("card-num-pages");
     isRead.classList.add("card-is-read");
     rating.classList.add("card-rating");
-    removeBtn.classList.add("remove-btn");
+    removeBtn.classList.add("remove-btn", "btn-small");
+    buttonBox.classList.add("buttonBox")
 
     title.textContent = book.title;
     author.textContent = book.author;
     numPages.textContent = `${book.numPages} pages`;
-    isRead.textContent = book.isRead ? "Already read" : "Not read yet";
-    card.append(title, author, numPages, isRead, toggleReadBtn, rating, removeBtn);
+    year.textContent = "Year of publication: " + book.year;
+    // isRead.textContent = book.isRead ? "Already read" : "Not read yet";
+    card.append(img, title, author, year, numPages, rating, isRead, buttonBox);
+    buttonBox.append(toggleReadBtn, removeBtn);
     bookList.appendChild(card);
   }
 }
@@ -211,6 +238,7 @@ function displayBookList() {
 function clearForm() {
   titleInput.value = "";
   authorInput.value = "";
+  yearInput.value = "";
   numPagesInput.value = null;
   isReadRadio.checked = true;
   ratingInput.value = 1;
@@ -249,27 +277,27 @@ window.onclick = function(event) {
 // FOR TESTING
 
 const sciFiBooksByWomen = [
-  { title: "Kindred", author: "Octavia E. Butler" },
-  { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin" },
-  { title: "Parable of the Sower", author: "Octavia E. Butler" },
-  { title: "Ancillary Justice", author: "Ann Leckie" },
-  { title: "Dawn", author: "Octavia E. Butler" },
-  { title: "The Power", author: "Naomi Alderman" },
-  { title: "Frankenstein", author: "Mary Shelley" },
-  { title: "The Hunger Games", author: "Suzanne Collins" },
-  { title: "Shards of Honor", author: "Lois McMaster Bujold" },
-  { title: "Who Fears Death", author: "Nnedi Okorafor" },
-  { title: "Binti", author: "Nnedi Okorafor" },
-  { title: "The Dispossessed", author: "Ursula K. Le Guin" },
-  { title: "Ammonite", author: "Nicola Griffith" },
-  { title: "Mirror Dance", author: "Lois McMaster Bujold" },
-  { title: "Grass", author: "Sheri S. Tepper" },
-  { title: "The Snow Queen", author: "Joan D. Vinge" },
-  { title: "Fledgling", author: "Octavia E. Butler" },
-  { title: "Oryx and Crake", author: "Margaret Atwood" },
-  { title: "The Handmaid's Tale", author: "Margaret Atwood" },
-  { title: "Memory", author: "Lois McMaster Bujold" },
-  { title: "Patternmaster", author: "Octavia E. Butler" },
+  { title: "Kindred", author: "Octavia E. Butler", year: 1979 },
+  { title: "The Left Hand of Darkness", author: "Ursula K. Le Guin", year: 1969 },
+  { title: "Parable of the Sower", author: "Octavia E. Butler", year: 1993 },
+  { title: "Ancillary Justice", author: "Ann Leckie", year: 2013 },
+  { title: "Dawn", author: "Octavia E. Butler", year: 1987 },
+  { title: "The Power", author: "Naomi Alderman", year: 2016 },
+  { title: "Frankenstein", author: "Mary Shelley", year: 1818 },
+  { title: "The Hunger Games", author: "Suzanne Collins", year: 2008 },
+  { title: "Shards of Honor", author: "Lois McMaster Bujold", year: 1986 },
+  { title: "Who Fears Death", author: "Nnedi Okorafor", year: 2010 },
+  { title: "Binti", author: "Nnedi Okorafor", year: 2015 },
+  { title: "The Dispossessed", author: "Ursula K. Le Guin", year: 1974 },
+  { title: "Ammonite", author: "Nicola Griffith", year: 1992 },
+  { title: "Mirror Dance", author: "Lois McMaster Bujold", year: 1994 },
+  { title: "Grass", author: "Sheri S. Tepper", year: 1989 },
+  { title: "The Snow Queen", author: "Joan D. Vinge", year: 1980 },
+  { title: "Fledgling", author: "Octavia E. Butler", year: 2005 },
+  { title: "Oryx and Crake", author: "Margaret Atwood", year: 2003 },
+  { title: "The Handmaid's Tale", author: "Margaret Atwood", year: 1985 },
+  { title: "Memory", author: "Lois McMaster Bujold", year: 1996 },
+  { title: "Patternmaster", author: "Octavia E. Butler", year: 1976 },
 ];
 
 function populateLibrary() {
@@ -277,6 +305,7 @@ function populateLibrary() {
       const newBook = new Book(
           book.title,
           book.author,
+          book.year,
           Math.floor(Math.random() * 500) + 100,
           Math.random() > 0.5,
           Math.floor(Math.random() * 5) + 1,
@@ -303,12 +332,43 @@ html {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Roboto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #333;
 }
 
 h1 {
-  margin: 0;
-  color: #585858;
+  font-size: 3rem;
+}
+
+hr {
+  border-top: 1px solid rgb(206, 206, 206);
+  align-self: stretch;
+  margin: 1rem;
+}
+
+h1 + p {
+  margin-bottom: 1rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.invisible {
+  visibility: none;
 }
 
 /* Form styling */
@@ -318,6 +378,8 @@ form {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Label styling */
@@ -330,7 +392,8 @@ label {
 /* Input fields styling */
 input[type="text"],
 input[type="number"],
-input[type="checkbox"] {
+input[type="checkbox"],
+input[type="url"] {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
@@ -338,9 +401,30 @@ input[type="checkbox"] {
   border-radius: 4px;
 }
 
+.form.button {
+  align-self: flex-end;
+}
+
+.is-read-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.radio-btn {
+  height: 100%;
+  margin-top: -5px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.radio-btn + label {
+  margin-right: 10px;
+}
+
 /* Button styling */
 button {
-  background-color: #28a745; /* Green */
+  background-color: #3b82f6;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -349,10 +433,41 @@ button {
   font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
+  display: flex;
+  justify-content: center;
 }
 
 button:hover {
-  background-color: #218838;
+  background-color: #1f73fa;
+}
+
+button.btn-small {
+  background-color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border: 2px solid;
+}
+
+button.btn-small.red {
+  border: 1px solid lightgrey;
+  color: #6e1010;
+  border-color: #6e1010;
+}
+
+button.btn-small.green {
+  border: 1px solid lightgrey;
+  color: #11752f;
+  border-color: #087a2a;
+}
+
+button.btn-small.red:hover, button.btn-small.green:hover {
+  opacity: 90%;
+}
+
+.buttonBox {
+  display: flex;
+  justify-content: space-between;
 }
 
 /* Book list styling */
@@ -360,50 +475,66 @@ button:hover {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   grid-gap: 20px;
-  background: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  align-self: stretch;
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
 }
 
 /* Card styling for each book */
 .card {
-  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  background: white;
   padding: 15px;
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   transition: transform 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .card-title {
-  color: #007bff; /* Blue */
-  font-size: 18px;
+  font-size: clamp(24px, 1rem, 30px);
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .card-author {
-  color: #6c757d; /* Grey */
+  color: #424242;
+  font-weight: bold;
+  margin-bottom: 5px;
+  border-bottom: 1px solid lightgrey;
+}
+
+.card-year {
+  font-size: 0.9rem;
+}
+
+.card-rating {
+  font-size: 2rem;
   margin-bottom: 5px;
 }
 
 .card-num-pages {
-  color: #28a745; /* Green */
+  font-size: 0.9rem;
   margin-bottom: 5px;
 }
 
 .card-is-read {
   font-style: italic;
-  color: #dc3545; /* Red */
+  color: #5e5c5d;
   margin-bottom: 5px;
 }
 
-.card-rating {
-  margin-bottom: 5px;
+.card .remove-btn {
+  float: right;
+  font-weight: bold;
+  color: grey;
+  border: 1px solid grey;
+}
+
+.card .remove-btn:hover{
+  background-color: rgb(245, 244, 244);
 }
 
 /* RATINGS */
@@ -421,16 +552,17 @@ button:hover {
 }
 
 .rating {
-  width: 90px;
+  width: 120px;
   unicode-bidi: bidi-override;
   direction: rtl;
-  text-align: center;
+  text-align: left;
   position: relative;
 }
 
 .rating > label {
   float: right;
   display: inline;
+  font-size: 1.2rem;
   padding: 0;
   margin: 0;
   position: relative;
@@ -452,7 +584,7 @@ button:hover {
   content: "\2605";
   position: absolute;
   left: 0;
-  color: #FFD700;
+  color: #f39406;
 }
 
 /* Star rating display */
@@ -468,7 +600,7 @@ button:hover {
 }
 
 .star-rating-filled::before {
-  color: #f5b505; /* Yellow color for filled stars */
+  color: #f39406; /* Yellow color for filled stars */
 }
 
 .star-rating-unfilled::before {
@@ -492,16 +624,16 @@ button:hover {
 /* Modal Content/Box */
 .form-modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: clamp(350px, 80%, 500px);
 }
 
 /* The Close Button */
 .close-btn {
   color: #aaa;
-  float: right;
+  align-self: flex-end;
   font-size: 28px;
   font-weight: bold;
 }

@@ -16,10 +16,6 @@ To Do
 - Add "Filter" option
 - Add "Delete all" option + Are you sure prompt?
 
-**Form**
-- Add more fields (language, publication date) to book object and input
-- Add possibility to add img, via url
-
 
 **Storage**
 - LocalStorage
@@ -28,3 +24,5 @@ To Do
 Done
 ===============
 
+- Add publication date to book object and input
+- Add possibility to add img, via url / display img in card
