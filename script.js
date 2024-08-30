@@ -197,34 +197,28 @@ function displayStats() {
   );
 }
 
-// Modal
+function setModal() {
+  const modal = document.querySelector("#form-modal");
+  const modalBtn = document.querySelector("#modal-btn");
+  const closeBtn = document.querySelector("#close-btn");
 
-// Get the modal
-const modal = document.querySelector("#form-modal");
+  modalBtn.onclick = function () {
+    clearForm();
+    modal.style.display = "block";
+  };
 
-// Get the button that opens the modal
-const modalBtn = document.querySelector("#modal-btn");
-
-// Get the <span> element that closes the modal
-const closeBtn = document.querySelector("#close-btn");
-
-// When the user clicks on the button, open the modal
-modalBtn.onclick = function () {
-  clearForm();
-  modal.style.display = "block";
-};
-
-// When the user clicks on <span> (x), close the modal
-closeBtn.onclick = function () {
-  modal.style.display = "none";
-};
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-  if (event.target == modal) {
+  closeBtn.onclick = function () {
     modal.style.display = "none";
-  }
-};
+  };
+
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+}
+
+setModal();
 
 const sciFiBooksByWomen = [
   {
