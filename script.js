@@ -220,6 +220,11 @@ function setModal() {
 
 setModal();
 
+function applyFilter() {
+  const sortBy = document.querySelector("#sort-by");
+  const textFilter = document.querySelector("#text-filter");
+}
+
 const sciFiBooksByWomen = [
   {
     title: "Kindred",

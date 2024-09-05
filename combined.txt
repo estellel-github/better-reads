@@ -7,7 +7,6 @@ To Do
 ===============
 
 **Library**
-- Your library is empty. Click + to add a book, or display our template library!
 
 - Add "Order by" option
   - title
@@ -17,7 +16,7 @@ To Do
 - Add "Delete all" option + Are you sure prompt?
 
 **Storage**
-- LocalStorage
+- LocalStorage ✅
 - Then: Firebase / auth with Google account
 
 Fix
@@ -105,12 +104,12 @@ Path: index.html
     <p>Keep track of your books with BetterReads!</p>
     <button id="modal-btn" class="modal-btn">+ Add Book</button>
     <p>or</p>
-    <button id="load-btn" class="btn">Load Sample Library</button>    
+    <button id="load-btn" class="load-btn">🚀 Load Sample Library</button>
     <hr>
     <h2>Stats</h2>
     <section id="stats" class="stats"></section>
     <hr>
-    <h2>Your Books</h2>
+    <section id="user-actions" class="user-actions"></section>
     <section id="book-list" class="book-list"></section>
   </div>
 </body>
@@ -129,6 +128,8 @@ const ratingInput = () => document.querySelector('input[name="star"]:checked');
 const isReadRadio = document.querySelector("#is-read-radio");
 const submitBtn = document.querySelector("#submit-btn");
 
+const loadBtn = document.querySelector("#load-btn");
+
 const stats = document.querySelector("#stats");
 const bookList = document.querySelector("#book-list");
 
@@ -144,7 +145,9 @@ function Book(title, author, year, numPages, isRead, rating, imgUrl) {
   this.numPages = numPages;
   this.isRead = isRead;
   this.rating = rating;
-  this.imgUrl = imgUrl || "https://www.boldstrokesbooks.com/assets/bsb/images/book-default-cover.jpg";
+  this.imgUrl =
+    imgUrl ||
+    "https://www.boldstrokesbooks.com/assets/bsb/images/book-default-cover.jpg";
   this.getBookInfo = function () {
     return `${this.title} by ${this.author}`;
   };
@@ -168,7 +171,6 @@ function addNewBook() {
   clearBookList();
   const newBook = getBookInput();
   library.push(newBook);
-  // console.log(parseInt(newBook.info()));
   console.table(library);
   displayBookList();
 }
@@ -237,6 +239,8 @@ function displayBookList() {
     img.alt = `Cover of ${book.title}`;
 
     card.classList.add("card");
+    card.classList.add("loading-effect");
+
     title.classList.add("card-title");
     author.classList.add("card-author");
     year.classList.add("card-year");
@@ -254,14 +258,14 @@ function displayBookList() {
     card.append(img, title, author, year, numPages, rating, buttonBox);
     buttonBox.append(toggleReadBtn, removeBtn);
     bookList.appendChild(card);
+
+    card.addEventListener('animationend', () => {
+      card.classList.remove("loading-effect");
+    });
   }
   storeToLocal();
   displayStats();
-}
-
-function uniqueAuthors(books) {
-  const authorsSet = new Set(books.map((book) => book.author));
-  return Array.from(authorsSet);
+  console.table(library);
 }
 
 function clearForm() {
@@ -275,6 +279,7 @@ function clearForm() {
 
 function displayStats() {
   clearStats();
+  
   const totalBooks = document.createElement("div");
   const totalAuthors = document.createElement("div");
   const totalRead = document.createElement("div");
@@ -283,7 +288,8 @@ function displayStats() {
 
   totalBooks.textContent = "📖 Total books: " + library.length;
 
-  let numUniqueAuthors = uniqueAuthors(library);
+  const authorsSet = new Set(library.map((book) => book.author));
+  const numUniqueAuthors = Array.from(authorsSet);
   totalAuthors.textContent =
     "👤 Individual authors: " + numUniqueAuthors.length;
 
@@ -293,14 +299,15 @@ function displayStats() {
   stats.append(totalBooks, totalAuthors, totalRead);
 
   let numBooksNotRead = library.filter((item) => item.isRead === false);
-  numBooksNotRead ? numBooksNotRead : numBooksNotRead = 0; 
-  
+
   totalNotRead.textContent =
     "⌛ Total books to read: " + numBooksNotRead.length;
 
-  let latestBookAdded = library[library.length - 1].getBookInfo();
-  console.log(latestBookAdded);
-  mostRecentAdded.textContent = "✨ Latest addition: " + latestBookAdded;
+  if (library.length > 0) {
+    let latestBookAdded = library[library.length - 1].getBookInfo();
+    mostRecentAdded.textContent = "✨ Latest addition: " + latestBookAdded;
+  }
+
   stats.append(
     totalBooks,
     totalAuthors,
@@ -310,36 +317,28 @@ function displayStats() {
   );
 }
 
-// Modal
+function setModal() {
+  const modal = document.querySelector("#form-modal");
+  const modalBtn = document.querySelector("#modal-btn");
+  const closeBtn = document.querySelector("#close-btn");
 
-// Get the modal
-const modal = document.querySelector("#form-modal");
+  modalBtn.onclick = function () {
+    clearForm();
+    modal.style.display = "block";
+  };
 
-// Get the button that opens the modal
-const modalBtn = document.querySelector("#modal-btn");
-
-// Get the <span> element that closes the modal
-const closeBtn = document.querySelector("#close-btn");
-
-// When the user clicks on the button, open the modal
-modalBtn.onclick = function () {
-  clearForm();
-  modal.style.display = "block";
-};
-
-// When the user clicks on <span> (x), close the modal
-closeBtn.onclick = function () {
-  modal.style.display = "none";
-};
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-  if (event.target == modal) {
+  closeBtn.onclick = function () {
     modal.style.display = "none";
-  }
-};
+  };
 
-// FOR TESTING
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
+}
+
+setModal();
 
 const sciFiBooksByWomen = [
   {
@@ -459,20 +458,31 @@ const sciFiBooksByWomen = [
 function storeToLocal() {
   const libraryJson = JSON.stringify(library);
   localStorage.setItem("library", libraryJson);
-  console.table(localStorage);
 }
 
 function retrieveBooks() {
   const storedBooksJson = localStorage.getItem("library");
-  if (storedBooksJson) {
-    library = JSON.parse(storedBooksJson);
+  if (storedBooksJson && storedBooksJson.length != 0) {
+    tempLibrary = JSON.parse(storedBooksJson);
+    tempLibrary.forEach((book) => {
+      const newBook = new Book(
+        book.title,
+        book.author,
+        book.year,
+        book.numPages,
+        book.isRead,
+        book.rating,
+        book.imgUrl,
+      );
+      library.push(newBook);
+    })
     displayBookList();
   } else {
-    console.log("No books found in Local Storage.")
+    console.log("No books found in Local Storage.");
   }
 }
 
-function populateLibrary() {
+function loadSampleLibrary() {
   library = [];
   sciFiBooksByWomen.forEach((book) => {
     const newBook = new Book(
@@ -482,12 +492,16 @@ function populateLibrary() {
       Math.floor(Math.random() * 500) + 100,
       Math.random() > 0.5,
       Math.floor(Math.random() * 5) + 1,
-      book.imgUrl
+      book.imgUrl,
     );
     library.push(newBook);
   });
+  loadBtn.textContent = "";
+  loadBtn.textContent = "🚀 Reload Sample Library";
   displayBookList();
 }
+
+loadBtn.addEventListener("click", (e) => loadSampleLibrary());
 
 window.onload = retrieveBooks();
 --------------------------
@@ -510,7 +524,7 @@ body {
   background-color: #f4f4f9;
   color: #333;
   line-height: 1.6;
-  padding: 20px;
+  padding: 5px;
 }
 
 h1, h2 {
@@ -535,7 +549,7 @@ h1 + p {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -825,6 +839,24 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* Card animation */
+
+@keyframes shiftRight {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.loading-effect {
+  animation: shiftRight 0.5s ease-out;
 }
 --------------------------
 Path: tempCodeRunnerFile.js
