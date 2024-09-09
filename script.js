@@ -17,21 +17,25 @@ let library = [];
 
 let bookIdCounter = library.length;
 
-function Book(title, author, year, numPages, isRead, rating, imgUrl) {
-  this.id = bookIdCounter++;
-  this.title = title;
-  this.author = author;
-  this.year = year;
-  this.numPages = numPages;
-  this.isRead = isRead;
-  this.rating = rating;
-  this.imgUrl =
-    imgUrl ||
-    "https://www.boldstrokesbooks.com/assets/bsb/images/book-default-cover.jpg";
-  this.getBookInfo = function () {
+class Book {
+  constructor(title, author, year, numPages, isRead, rating, imgUrl) {
+    this.id = bookIdCounter++;
+    this.title = title;
+    this.author = author;
+    this.year = year;
+    this.numPages = numPages;
+    this.isRead = isRead;
+    this.rating = rating;
+    this.imgUrl =
+      imgUrl ||
+      "https://www.boldstrokesbooks.com/assets/bsb/images/book-default-cover.jpg";
+  }
+
+  getBookInfo() {
     return `${this.title} by ${this.author}`;
   };
-  this.toggleReadStatus = function () {
+  
+  toggleReadStatus() {
     this.isRead = !this.isRead;
   };
 }
