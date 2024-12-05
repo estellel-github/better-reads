@@ -1,39 +1,50 @@
-# better-reads
+# BetterReads
 
-To Do
-===============
+A digital book tracker built with HTML, CSS, and JavaScript.
 
-**Form**
-- Basic validation
+![alt text](image.png)
 
-**Library**
+### 🔗 Live Demo
 
-- Add "Order by" option
-  - title
-  - author
-  - pages
-- Add "Filter" option
-- Add "Delete all" option + Are you sure prompt?
+https://estellel-github.github.io/better-reads/
 
-**Storage**
-- LocalStorage ✅
-- Then: Firebase / auth with Google account
+---
 
-Fix
-===============
-- Recheck all UI on mobile
-- Form on mobile (iOS, Chrome) -> radio buttons not showing
+## Features
 
-Done
-===============
+- Add books with details like title, author, year of publication, number of pages, a cover image, and a rating.
+- See library stats: total books, unique authors, read/unread counts, latest addition.
+- Re-load sample library to test the interface if library is empty.
+- Data persistence with LocalStorage.
 
-- Add publication date to book object and input ✅
-- Add possibility to add img, via url / display img in card ✅
+---
 
-- Display inverted library so that recent addition shows on top ✅
+## Tools Used
 
-- Add library stats: ✅
-  - total books ✅
-  - total authors ✅
-  - read/unread ✅
-  - latest addition ✅
+- **Development**: Visual Studio Code
+- **Version Control**: Git and GitHub
+
+---
+
+## External Resources
+
+- Google Fonts for typography
+- Wikimedia for book covers
+
+---
+
+## Learning Outcomes
+
+- Improved my proficiency in DOM manipulation and event handling in JavaScript.
+- More practice with implementing responsive design using CSS Grid.
+- First successful attempt at implementing persistent storage with LocalStorage.
+
+---
+
+## How to Use
+
+1. Clone the repository.
+2. Open `index.html` in your browser.
+3. Click on the **+ Add Book** button to add books manually.
+4. Use the **Load Sample Library** button to explore the sample library.
+5. Manage your library by marking books as read/unread, or removing them.
