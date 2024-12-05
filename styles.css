@@ -1,4 +1,3 @@
-/* Resets and general */
 * {
   box-sizing: border-box;
   padding: 0;
@@ -18,7 +17,8 @@ body {
   padding: 5px;
 }
 
-h1, h2 {
+h1,
+h2 {
   color: #333;
 }
 
@@ -32,7 +32,7 @@ hr {
   margin: 1rem;
 }
 
-h1 + p {
+h1+p {
   margin-bottom: 1rem;
 }
 
@@ -50,25 +50,23 @@ h1 + p {
   visibility: none;
 }
 
-/* Form styling */
+
 form {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
 
-/* Label styling */
 label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-/* Input fields styling */
 input[type="text"],
 input[type="number"],
 input[type="checkbox"],
@@ -97,11 +95,10 @@ input[type="url"] {
   vertical-align: middle;
 }
 
-.radio-btn + label {
+.radio-btn+label {
   margin-right: 10px;
 }
 
-/* Button styling */
 button {
   background-color: #3b82f6;
   color: white;
@@ -140,7 +137,8 @@ button.btn-small.green {
   border-color: #087a2a;
 }
 
-button.btn-small.red:hover, button.btn-small.green:hover {
+button.btn-small.red:hover,
+button.btn-small.green:hover {
   opacity: 90%;
 }
 
@@ -149,7 +147,6 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   justify-content: space-between;
 }
 
-/* Book list styling */
 #book-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -157,15 +154,13 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   padding: 20px;
   border-radius: 8px;
   align-self: stretch;
-  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
 }
 
-/* Card styling for each book */
 .card {
   background: white;
   padding: 15px;
   border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease;
   font-size: 1rem;
   display: flex;
@@ -173,7 +168,7 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   justify-content: space-between;
 }
 
-.card > img {
+.card>img {
   width: 150px;
   height: 200px;
   object-fit: cover;
@@ -220,15 +215,14 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   border: 1px solid grey;
 }
 
-.card .remove-btn:hover{
+.card .remove-btn:hover {
   background-color: rgb(245, 244, 244);
 }
-
-/* RATINGS */
 
 .txt-center {
   text-align: center;
 }
+
 .hide {
   display: none;
 }
@@ -246,7 +240,7 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   position: relative;
 }
 
-.rating > label {
+.rating>label {
   float: right;
   display: inline;
   font-size: 1.2rem;
@@ -258,57 +252,54 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   color: #000;
 }
 
-.rating > label:hover,
-.rating > label:hover ~ label,
-.rating > input.radio-btn:checked ~ label {
+.rating>label:hover,
+.rating>label:hover~label,
+.rating>input.radio-btn:checked~label {
   color: transparent;
 }
 
-.rating > label:hover:before,
-.rating > label:hover ~ label:before,
-.rating > input.radio-btn:checked ~ label:before,
-.rating > input.radio-btn:checked ~ label:before {
+.rating>label:hover:before,
+.rating>label:hover~label:before,
+.rating>input.radio-btn:checked~label:before,
+.rating>input.radio-btn:checked~label:before {
   content: "\2605";
   position: absolute;
   left: 0;
   color: #f39406;
 }
 
-/* Star rating display */
-.star-rating-filled, .star-rating-unfilled {
-  /* display: inline-block; */
+.star-rating-filled,
+.star-rating-unfilled {
   position: relative;
   width: 1.1em;
 }
 
-.star-rating-filled::before, .star-rating-unfilled::before {
-  content: "★"; /* This sets the star character */
-  /* position: absolute; */
+.star-rating-filled::before,
+.star-rating-unfilled::before {
+  content: "★";
 }
 
 .star-rating-filled::before {
-  color: #f39406; /* Yellow color for filled stars */
+  color: #f39406;
 }
 
 .star-rating-unfilled::before {
-  color: #a3a3a3; /* Transparent color for unfilled stars */
+  color: #a3a3a3;
 }
 
-/* The Modal (background) */
 .form-modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: none;
+  position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-/* Modal Content/Box */
 .form-modal-content {
   background-color: #fefefe;
   margin: 15% auto;
@@ -317,7 +308,6 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   width: clamp(350px, 80%, 500px);
 }
 
-/* The Close Button */
 .close-btn {
   color: #aaa;
   align-self: flex-end;
@@ -330,22 +320,4 @@ button.btn-small.red:hover, button.btn-small.green:hover {
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
-
-/* Card animation */
-
-@keyframes shiftRight {
-  0% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(20px);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.loading-effect {
-  animation: shiftRight 0.5s ease-out;
 }
