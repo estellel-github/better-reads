@@ -289,23 +289,23 @@ button.btn-small.green:hover {
 
 .form-modal {
   display: none;
+  place-items: center;
   position: fixed;
   z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
 }
 
 .form-modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin-top: 2rem;
   padding: 20px;
   border: 1px solid #888;
   width: clamp(350px, 80%, 500px);
+  border-radius: 8px;
 }
 
 .close-btn {
